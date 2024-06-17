@@ -1,0 +1,39 @@
+USE db_social;
+
+#Seleziona gli utenti che hanno postato almeno un video
+SELECT u.*, m.`type` 
+FROM users u
+JOIN posts p ON p.user_id  = u.id 
+JOIN media_post mp ON p.id = mp.media_id 
+JOIN medias m ON m.id = mp.media_id 
+WHERE m.`type` LIKE 'video';
+
+#Seleziona tutti i post senza Like (13)
+SELECT p.*
+FROM likes l 
+RIGHT JOIN posts p ON l.post_id = p.id
+WHERE isnull(l.post_id);
+
+#Conta il numero di like per ogni post (165)  -- me ne escono 10 in più
+SELECT count(l.post_id), l.post_id 
+FROM likes l
+GROUP BY l.post_id ;
+
+SELECT *
+FROM likes l 
+ORDER BY l.post_id;
+
+#Ordina gli utenti per il numero di media caricati (25) 
+SELECT count(m.user_id) AS 'media_caricati', u.username 
+FROM users u 
+JOIN medias m ON m.user_id = u.id 
+GROUP BY m.user_id
+ORDER BY count(m.user_id);
+
+#Ordina gli utenti per totale di likes ricevuti nei loro posts (25) 
+SELECT count(p.user_id), u.username 
+FROM users u 
+JOIN posts p ON p.user_id = u.id
+JOIN likes l ON l.post_id = p.id 
+GROUP BY p.user_id 
+ORDER BY count(l.post_id);
