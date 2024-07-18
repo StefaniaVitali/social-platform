@@ -14,10 +14,11 @@ FROM likes l
 RIGHT JOIN posts p ON l.post_id = p.id
 WHERE isnull(l.post_id);
 
-#Conta il numero di like per ogni post (165)  -- me ne escono 10 in più
-SELECT count(l.post_id), l.post_id 
-FROM likes l
-GROUP BY l.post_id ;
+#Conta il numero di like per ogni post (165)  
+SELECT p.id, count(l.post_id)
+FROM posts p 
+LEFT JOIN likes l ON p.id = l.post_id
+GROUP BY p.id;
 
 SELECT *
 FROM likes l 
